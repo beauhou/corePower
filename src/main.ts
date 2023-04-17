@@ -1,5 +1,9 @@
 import { createApp } from 'vue'
-import './style.css'
 import App from './App.vue'
 
-createApp(App).mount('#app')
+//nativeUI配置
+
+import nativiui from 'naive-ui'
+const app=createApp(App);
+app.mount('#app');
+app.use(nativiui);

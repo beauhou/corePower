@@ -5,7 +5,6 @@
        :root-indent="36"
        :indent="12"
        :options="menuOptions"
-       style="width: 500px;"
      />
    </template>
    

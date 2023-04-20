@@ -5,9 +5,7 @@
 </template>
 <style scoped>
 .content-container{
-    height: 100%;
-    background-color: cadetblue;
-    
+    height: 100%;    
 }
 
 </style>

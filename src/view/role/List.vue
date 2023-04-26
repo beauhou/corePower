@@ -1,6 +1,6 @@
 <template>
     <div class="user-operation">
-        <n-button attr-type="button" @click="handleButtonClick">
+        <n-button attr-type="button" @click="save">
             新增
         </n-button>
     </div>
@@ -13,66 +13,61 @@
                 搜索
             </n-button>
         </n-form-item>
-
     </n-form>
     <div>
-        <n-data-table :columns="columns" :data="data" :pagination="pagination" :max-height="420" />
+        <n-data-table a :columns="columns" :data="list.itemList" :pagination="{ pageSize: 5 }" :max-height="420" />
     </div>
 </template>
   
-<script lang="ts">
-import { defineComponent, h } from 'vue';
+<script lang="ts" setup >
+import { h, ref } from 'vue';
 import { useDialog } from 'naive-ui';
 import Add from './Add.vue';
+import roleService from '../../service/RoleService';
+import { PageResultConstant } from '../../constant/page/PageResultConstant';
+import { RoleModel } from '../../model/RoleModel';
+/**
+ * 对话框
+ */
+const dialog = useDialog();
+const list = ref(new PageResultConstant<RoleModel>());
 
+async function getList() {
+    list.value = await roleService.page();
+}
 
 const columns = [
     {
-        title: '用户名',
-        key: 'name'
+        title: '角色名称',
+        key: 'roleName'
     },
     {
-        title: '年龄',
-        key: 'age'
+        title: '描述',
+        key: 'description'
     },
     {
-        title: '地址',
-        key: 'address'
+        title: '创建时间',
+        key: 'createdTime'
     }
 ]
+getList();
 
-export default defineComponent({
-    setup() {
-        const dialog = useDialog()
-        return {
-            handleButtonClick() {
-                dialog.create({
-                    showIcon:false,
-                    content: () => h(Add)
-                
-                })
-            }
-        }
-    },
-    data() {
-        return {
-            data: Array.from({ length: 46 }).map((_, index) => ({
-                key: index,
-                name: `Edward King ${index}`,
-                age: 32,
-                address: `London, Park Lane no. ${index}`
-            })),
-            columns,
-            pagination: {
-                pageSize: 15
-            }
-        }
-    }
-})
+/**
+ * 保存
+ */
+function save() {
+    dialog.create({
+        title: '保存角色',
+        content: () => h(Add,{"id":18}),
+        showIcon: false,
+        maskClosable:false,
+    })
+}
+
 </script>
 
 <style scoped>
-.user-operation{
+.user-operation {
     padding-bottom: 10px;
 }
 </style>

@@ -6,7 +6,6 @@
       </n-form-item>
       <n-form-item label="描述">
         <n-input
-        readonly="true"
         v-model:value="roleModel.description"
         placeholder="描述"
         type="textarea"
@@ -18,7 +17,7 @@
       </n-form-item>
     </n-form>
     <n-form style="pading 10px">
-      <n-button type="success" @click="save">
+      <n-button type="success" @click="saveOrUpdate(roleModel)">
         保存
       </n-button>
       <n-button type="tertiary">
@@ -34,9 +33,9 @@ import { RoleModel } from '../../model/RoleModel';
 import  roleService  from '../../service/RoleService.ts'
 import { OperationConstant } from '../../constant/OperationConstant';
 const roleModel = ref(new RoleModel())
-const save = () => { roleService.save(roleModel.value); }
+
 const props=defineProps({
-  id:{
+  primaryKey:{
     type:Number
   },
   operationType:{
@@ -46,16 +45,25 @@ const props=defineProps({
 })
 
 
-/**
- * 创建
- */
 onMounted(()=>{
-  //获取明细
-  async function getInfo(){
-    roleModel.value=await roleService.getById(props.id as number);
+ //获取明细
+ async function getInfo(){
+    roleModel.value=await roleService.getById(props.primaryKey as number);
   }
-  getInfo();
+  if(props.operationType===OperationConstant.update){
+    getInfo();
+  }
 })
 
+/**
+ * 修改或者保存
+ */
+async function saveOrUpdate(params:RoleModel) {
+  if(props.operationType===OperationConstant.update){
+    await roleService.update(params);
+  }else{
+    await roleService.save(params);
+  }
+}
 
 </script>

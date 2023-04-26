@@ -16,7 +16,6 @@ export abstract class BaseService<M extends BaseModel> {
    */
   async getById(primaryKey: number): Promise<M> {
     const data = await HttpUtils.sendGet<M>(this.baseUrl + "/get", { primaryKey});
-    console.log("哈哈哈",data);
     return data.data;
   }
 

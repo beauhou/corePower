@@ -19,7 +19,15 @@
     </div>
     <div class="pagination">
         <n-pagination v-model:page="pageList.currentPage" v-model:page-size="pageList.currentPageSize" 
-        :page-count="Math.ceil(pageList.total/pageList.currentPageSize)" show-size-picker :page-sizes="pageSizes" 	/>
+        :page-count="pageList.getTotalCount()" show-size-picker :page-sizes="pageSizes"  @on-update:page="Changepage"
+        @on-update="changePageSize">
+        <template #prev>
+      上一页
+    </template>
+    <template #next>
+      下一页
+    </template>
+    </n-pagination>
         <div style="margin-left: 10px;"></div>
         <n-icon class="pagination-refresh" size="20" :component="Reload" @click="getList" />
     </div>
@@ -30,7 +38,7 @@ import { h, ref } from 'vue';
 import { useDialog, NButton } from 'naive-ui';
 import SaveOrUpdate from './SaveOrUpdate.vue';
 import roleService from '../../service/RoleService';
-import { PageResultConstant } from '../../constant/page/PageResultConstant';
+import { PageConstant } from '../../constant/page/PageConstant';
 import { RoleModel } from '../../model/RoleModel';
 import { OperationConstant } from '../../constant/OperationConstant';
 import { Reload } from '@vicons/ionicons5'
@@ -40,19 +48,17 @@ import { Reload } from '@vicons/ionicons5'
  */
 const dialog = useDialog();
 const loading = ref(false);
-const pageList = ref(new PageResultConstant<RoleModel>());
-
-async function getList() {
+const pageList = ref(new PageConstant<RoleModel>());
+async function getList(pageInfo?:PageConstant<RoleModel>) {
     loading.value = true;
-    pageList.value = await roleService.page();
-    console.log(pageList.value)
+    pageList.value = await roleService.page(pageInfo);
     loading.value = false;
 }
 
 const columns = [
     {
-        title: 'id',
-        key: 'roleId'
+        title: '主键',
+        key: 'primaryKey'
     },
     {
         title: '角色名称',
@@ -75,7 +81,7 @@ const columns = [
                 {
                     size: 'small',
                     onClick: () => {
-                        update(row.roleId);
+                        update(row.primaryKey);
                     }
                 },
                 { default: () => '编辑' }
@@ -127,6 +133,17 @@ const pageSizes = [
         value: 40
       }
     ]
+
+    function Changepage(page:number){
+        console.log("当前页",page)
+        pageList.value.currentPage=page;
+        getList(pageList.value);
+    }
+    
+    function changePageSize(pageSize:number){
+        console.log("当前页码",pageSize)
+        pageList.value.currentPageSize=pageSize;
+    }
 
 </script>
 

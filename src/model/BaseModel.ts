@@ -4,6 +4,9 @@
  * 基础数据模型
  */
 export  abstract class BaseModel{
+    forEach(arg0: (element: T) => void) {
+      throw new Error("Method not implemented.");
+    }
 
     
 

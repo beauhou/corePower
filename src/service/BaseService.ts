@@ -63,7 +63,7 @@ export abstract class BaseService<T extends BaseModel> {
       this.baseUrl + "/page",
       pageRequest
     );
-
+    // return data.data;
     return this.transferPage(data.data);
   }
 
@@ -88,9 +88,8 @@ export abstract class BaseService<T extends BaseModel> {
    * 将Json对象转化为模型对象
    */
   protected transferJsonObj2Model(target: any): T {
-    console.log("转换类型",target)
-    const result = plainToClass(this.getModelClazz(), target);
-    return result;
+    // const result = plainToClass(this.getModelClazz(), target);
+    return target;
   }
 
 

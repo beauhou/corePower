@@ -20,6 +20,7 @@ import { BaseService } from "./BaseService.ts";
    * 请求根地址
    */
   baseUrl: string="/role";
+  
 
 
 }

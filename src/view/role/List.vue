@@ -18,7 +18,7 @@
         <n-data-table a :columns="columns" :data="pageList.itemList" :max-height="420" :loading="loading" />
     </div>
     <div class="pagination">
-        <n-pagination v-model:page="pageList.currentPage" v-model:page-size="pageList.currentPageSize" 
+        <n-pagination :page="pageList.currentPage" v-model:page-size="pageList.currentPageSize" 
         :page-count="pageList.getTotalCount()" show-size-picker :page-sizes="pageSizes"  @on-update:page="Changepage"
         @on-update="changePageSize">
         <template #prev>
@@ -54,6 +54,9 @@ async function getList(pageInfo?:PageConstant<RoleModel>) {
     pageList.value = await roleService.page(pageInfo);
     loading.value = false;
 }
+
+
+
 
 const columns = [
     {
@@ -135,6 +138,7 @@ const pageSizes = [
     ]
 
     function Changepage(page:number){
+        // debugger;
         console.log("当前页",page)
         pageList.value.currentPage=page;
         getList(pageList.value);
